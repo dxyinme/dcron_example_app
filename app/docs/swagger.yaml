@@ -1,0 +1,60 @@
+basePath: /api/v1/user
+externalDocs:
+  description: OpenAPI
+  url: https://swagger.io/resources/open-api/
+info:
+  contact: {}
+  termsOfService: http://swagger.io/terms/
+  title: APP
+  version: "0.1"
+paths:
+  /task/{taskName}:
+    delete:
+      consumes:
+      - application/json
+      description: remove cron task by task name
+      parameters:
+      - description: cron task name
+        in: path
+        name: taskName
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: remove task
+      tags:
+      - task
+    post:
+      consumes:
+      - application/json
+      description: add cron task
+      parameters:
+      - description: cron task name
+        in: path
+        name: taskName
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: add task
+      tags:
+      - task
+swagger: "2.0"
