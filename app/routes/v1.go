@@ -13,12 +13,28 @@ func New() (eng *gin.Engine) {
 		gin.Recovery(),
 	)
 	taskController := new(controllers.TaskController)
+	tasksController := new(controllers.TasksController)
+	executeController := new(controllers.ExecuteController)
+	dbController := new(controllers.DBController)
+
 	v1 := eng.Group(basePath)
 	{
 		task := v1.Group("/task")
 		{
-			task.POST("/:taskName", taskController.Add)
+			task.PUT("/:taskName", taskController.CreateOrUpdate)
 			task.DELETE("/:taskName", taskController.Remove)
+		}
+
+		v1.GET("/tasks", tasksController.List)
+
+		execute := eng.Group("/execute")
+		{
+			execute.POST("/runSQL", executeController.RunSQL)
+		}
+
+		databases := eng.Group("/databases")
+		{
+			databases.PUT("/:dbName", dbController.CreateOrUpdate)
 		}
 	}
 	return

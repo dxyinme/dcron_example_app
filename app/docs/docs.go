@@ -17,9 +17,84 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/databases": {
+            "get": {
+                "description": "db CreateOrUpdate",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "db"
+                ],
+                "summary": "db CreateOrUpdate",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "database custom name",
+                        "name": "dbName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "database CreateOrUpdate request",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/types.DBReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/execute": {
+            "get": {
+                "description": "execute sql cmd",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "execute"
+                ],
+                "summary": "execute sql cmd",
+                "parameters": [
+                    {
+                        "description": "Run SQL request",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/types.RunSQLReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/task/{taskName}": {
             "post": {
-                "description": "add cron task",
+                "description": "create or update cron task",
                 "consumes": [
                     "application/json"
                 ],
@@ -29,7 +104,7 @@ const docTemplate = `{
                 "tags": [
                     "task"
                 ],
-                "summary": "add task",
+                "summary": "create or update task",
                 "parameters": [
                     {
                         "type": "string",
@@ -37,6 +112,15 @@ const docTemplate = `{
                         "name": "taskName",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "description": "create or update cron task request",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/types.TaskReq"
+                        }
                     }
                 ],
                 "responses": {
@@ -88,6 +172,113 @@ const docTemplate = `{
                             "type": "string"
                         }
                     }
+                }
+            }
+        },
+        "/tasks": {
+            "get": {
+                "description": "list cron tasks",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "tasks"
+                ],
+                "summary": "list tasks",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/types.Task"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "types.DBReq": {
+            "type": "object",
+            "required": [
+                "addr",
+                "databaseName",
+                "dbType",
+                "password",
+                "user"
+            ],
+            "properties": {
+                "addr": {
+                    "type": "string"
+                },
+                "databaseName": {
+                    "type": "string"
+                },
+                "dbType": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "user": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.RunSQLReq": {
+            "type": "object",
+            "required": [
+                "SQLStr"
+            ],
+            "properties": {
+                "SQLStr": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.Task": {
+            "type": "object",
+            "required": [
+                "SQLStr",
+                "cronStr",
+                "dbName"
+            ],
+            "properties": {
+                "SQLStr": {
+                    "type": "string"
+                },
+                "cronStr": {
+                    "type": "string"
+                },
+                "dbName": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.TaskReq": {
+            "type": "object",
+            "required": [
+                "SQLStr",
+                "cronStr",
+                "dbName"
+            ],
+            "properties": {
+                "SQLStr": {
+                    "type": "string"
+                },
+                "cronStr": {
+                    "type": "string"
+                },
+                "dbName": {
+                    "type": "string"
                 }
             }
         }

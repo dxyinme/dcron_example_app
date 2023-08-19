@@ -1,4 +1,59 @@
 basePath: /api/v1/user
+definitions:
+  types.DBReq:
+    properties:
+      addr:
+        type: string
+      databaseName:
+        type: string
+      dbType:
+        type: string
+      password:
+        type: string
+      user:
+        type: string
+    required:
+    - addr
+    - databaseName
+    - dbType
+    - password
+    - user
+    type: object
+  types.RunSQLReq:
+    properties:
+      SQLStr:
+        type: string
+    required:
+    - SQLStr
+    type: object
+  types.Task:
+    properties:
+      SQLStr:
+        type: string
+      cronStr:
+        type: string
+      dbName:
+        type: string
+      name:
+        type: string
+    required:
+    - SQLStr
+    - cronStr
+    - dbName
+    type: object
+  types.TaskReq:
+    properties:
+      SQLStr:
+        type: string
+      cronStr:
+        type: string
+      dbName:
+        type: string
+    required:
+    - SQLStr
+    - cronStr
+    - dbName
+    type: object
 externalDocs:
   description: OpenAPI
   url: https://swagger.io/resources/open-api/
@@ -8,6 +63,55 @@ info:
   title: APP
   version: "0.1"
 paths:
+  /databases:
+    get:
+      consumes:
+      - application/json
+      description: db CreateOrUpdate
+      parameters:
+      - description: database custom name
+        in: path
+        name: dbName
+        required: true
+        type: string
+      - description: database CreateOrUpdate request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/types.DBReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: db CreateOrUpdate
+      tags:
+      - db
+  /execute:
+    get:
+      consumes:
+      - application/json
+      description: execute sql cmd
+      parameters:
+      - description: Run SQL request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/types.RunSQLReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: execute sql cmd
+      tags:
+      - execute
   /task/{taskName}:
     delete:
       consumes:
@@ -36,13 +140,19 @@ paths:
     post:
       consumes:
       - application/json
-      description: add cron task
+      description: create or update cron task
       parameters:
       - description: cron task name
         in: path
         name: taskName
         required: true
         type: string
+      - description: create or update cron task request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/types.TaskReq'
       produces:
       - application/json
       responses:
@@ -54,7 +164,24 @@ paths:
           description: Bad Request
           schema:
             type: string
-      summary: add task
+      summary: create or update task
       tags:
       - task
+  /tasks:
+    get:
+      consumes:
+      - application/json
+      description: list cron tasks
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/types.Task'
+            type: array
+      summary: list tasks
+      tags:
+      - tasks
 swagger: "2.0"

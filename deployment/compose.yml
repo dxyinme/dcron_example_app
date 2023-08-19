@@ -1,0 +1,20 @@
+version: '2'
+services:
+  redis:
+    image: redis:6.0-alpine
+    restart: always
+
+  mysql:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+
+  app:
+    image: dcronapp:latest
+    scale: 3
+    links:
+      - mysql
+      - redis
+    ports:
+      - 10010-10020:8080
