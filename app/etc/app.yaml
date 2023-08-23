@@ -1,0 +1,11 @@
+port: 8080
+redis:
+  addr: 127.0.0.1:6379
+
+mysql:
+  addr: 127.0.0.1:3306
+  password: 123456
+  user: root
+
+rpc:
+  port: 8081

@@ -27,7 +27,8 @@ type TaskReq struct {
 
 // RunSQLReq example
 type RunSQLReq struct {
-	SQLStr string `json:"SQLStr" binding:"required"`
+	DBCustomName string `json:"dbCustomName" binding:"required"`
+	SQLStr       string `json:"SQLStr" binding:"required"`
 }
 
 // DBReq example

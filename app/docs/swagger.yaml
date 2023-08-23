@@ -1,4 +1,4 @@
-basePath: /api/v1/user
+basePath: /api/v1
 definitions:
   types.DBReq:
     properties:
@@ -23,8 +23,11 @@ definitions:
     properties:
       SQLStr:
         type: string
+      dbCustomName:
+        type: string
     required:
     - SQLStr
+    - dbCustomName
     type: object
   types.Task:
     properties:
@@ -63,8 +66,28 @@ info:
   title: APP
   version: "0.1"
 paths:
-  /databases:
-    get:
+  /databases/{dbName}:
+    delete:
+      consumes:
+      - application/json
+      description: db Remove
+      parameters:
+      - description: database custom name
+        in: path
+        name: dbName
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: db Remove
+      tags:
+      - db
+    put:
       consumes:
       - application/json
       description: db CreateOrUpdate
@@ -90,7 +113,7 @@ paths:
       summary: db CreateOrUpdate
       tags:
       - db
-  /execute:
+  /execute/runSQL:
     get:
       consumes:
       - application/json

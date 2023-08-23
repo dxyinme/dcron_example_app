@@ -17,8 +17,8 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/databases": {
-            "get": {
+        "/databases/{dbName}": {
+            "put": {
                 "description": "db CreateOrUpdate",
                 "consumes": [
                     "application/json"
@@ -56,9 +56,39 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "delete": {
+                "description": "db Remove",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "db"
+                ],
+                "summary": "db Remove",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "database custom name",
+                        "name": "dbName",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
             }
         },
-        "/execute": {
+        "/execute/runSQL": {
             "get": {
                 "description": "execute sql cmd",
                 "consumes": [
@@ -233,10 +263,14 @@ const docTemplate = `{
         "types.RunSQLReq": {
             "type": "object",
             "required": [
-                "SQLStr"
+                "SQLStr",
+                "dbCustomName"
             ],
             "properties": {
                 "SQLStr": {
+                    "type": "string"
+                },
+                "dbCustomName": {
                     "type": "string"
                 }
             }
@@ -293,7 +327,7 @@ const docTemplate = `{
 var SwaggerInfo = &swag.Spec{
 	Version:          "0.1",
 	Host:             "",
-	BasePath:         "/api/v1/user",
+	BasePath:         "/api/v1",
 	Schemes:          []string{},
 	Title:            "APP",
 	Description:      "",

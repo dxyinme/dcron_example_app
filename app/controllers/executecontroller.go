@@ -1,6 +1,12 @@
 package controllers
 
-import "github.com/gin-gonic/gin"
+import (
+	"app/types"
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
+)
 
 type ExecuteController struct{}
 
@@ -13,5 +19,16 @@ type ExecuteController struct{}
 //	@Produce			json
 //	@Param				body body types.RunSQLReq true "Run SQL request"
 //	@Success			200 {string} OK
-//	@Router				/execute [get]
-func (ec *ExecuteController) RunSQL(ctx *gin.Context) {}
+//	@Router				/execute/runSQL [get]
+func (ec *ExecuteController) RunSQL(ctx *gin.Context) {
+	var err error
+	req := types.RunSQLReq{}
+	err = ctx.BindJSON(&req)
+	if err != nil {
+		logrus.Error(err)
+		ctx.String(http.StatusBadRequest, "binding error: %s", err.Error())
+		return
+	}
+
+	ctx.String(http.StatusOK, "OK")
+}

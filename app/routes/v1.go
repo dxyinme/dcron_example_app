@@ -27,14 +27,15 @@ func New() (eng *gin.Engine) {
 
 		v1.GET("/tasks", tasksController.List)
 
-		execute := eng.Group("/execute")
+		execute := v1.Group("/execute")
 		{
 			execute.POST("/runSQL", executeController.RunSQL)
 		}
 
-		databases := eng.Group("/databases")
+		databases := v1.Group("/databases")
 		{
 			databases.PUT("/:dbName", dbController.CreateOrUpdate)
+			databases.DELETE("/:dbName", dbController.Remove)
 		}
 	}
 	return
