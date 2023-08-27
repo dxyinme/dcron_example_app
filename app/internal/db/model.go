@@ -16,8 +16,7 @@ type Task struct {
 }
 
 type Database struct {
-	gorm.Model
-	CustomerName string `gorm:"unique"`
+	CustomerName string `gorm:"primaryKey;type:VARCHAR(128)"`
 	DBType       string
 	User         string
 	Password     string

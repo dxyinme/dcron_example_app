@@ -17,7 +17,63 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/databases": {
+            "get": {
+                "description": "list database",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "db"
+                ],
+                "summary": "list Database",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/types.DB"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/databases/{dbName}": {
+            "get": {
+                "description": "db Get",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "db"
+                ],
+                "summary": "db Get",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "database customer name",
+                        "name": "dbName",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/types.DB"
+                        }
+                    }
+                }
+            },
             "put": {
                 "description": "db CreateOrUpdate",
                 "consumes": [
@@ -33,7 +89,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "database custom name",
+                        "description": "database customer name",
                         "name": "dbName",
                         "in": "path",
                         "required": true
@@ -72,7 +128,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "database custom name",
+                        "description": "database customer name",
                         "name": "dbName",
                         "in": "path",
                         "required": true
@@ -122,8 +178,64 @@ const docTemplate = `{
                 }
             }
         },
-        "/task/{taskName}": {
-            "post": {
+        "/tasks": {
+            "get": {
+                "description": "list cron tasks",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "task"
+                ],
+                "summary": "list tasks",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/types.Task"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tasks/{taskName}": {
+            "get": {
+                "description": "task Get",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "task"
+                ],
+                "summary": "task Get",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "task name",
+                        "name": "taskName",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/types.Task"
+                        }
+                    }
+                }
+            },
+            "put": {
                 "description": "create or update cron task",
                 "consumes": [
                     "application/json"
@@ -204,35 +316,40 @@ const docTemplate = `{
                     }
                 }
             }
-        },
-        "/tasks": {
-            "get": {
-                "description": "list cron tasks",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "tasks"
-                ],
-                "summary": "list tasks",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/types.Task"
-                            }
-                        }
-                    }
-                }
-            }
         }
     },
     "definitions": {
+        "types.DB": {
+            "type": "object",
+            "required": [
+                "addr",
+                "customerName",
+                "databaseName",
+                "dbType",
+                "password",
+                "user"
+            ],
+            "properties": {
+                "addr": {
+                    "type": "string"
+                },
+                "customerName": {
+                    "type": "string"
+                },
+                "databaseName": {
+                    "type": "string"
+                },
+                "dbType": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "user": {
+                    "type": "string"
+                }
+            }
+        },
         "types.DBReq": {
             "type": "object",
             "required": [
@@ -264,13 +381,13 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "SQLStr",
-                "dbCustomName"
+                "dbCustomerName"
             ],
             "properties": {
                 "SQLStr": {
                     "type": "string"
                 },
-                "dbCustomName": {
+                "dbCustomerName": {
                     "type": "string"
                 }
             }

@@ -35,6 +35,16 @@ func (ss *SelfStore) UpsertDataBase(db *Database) (err error) {
 	return ss.db.Save(db).Error
 }
 
+func (ss *SelfStore) GetDataBaseByCustomerName(customerName string) (db Database, err error) {
+	err = ss.db.Where("customer_name = ?", customerName).First(&db).Error
+	return
+}
+
+func (ss *SelfStore) DeleteDataBaseByCustomerName(customerName string) (err error) {
+	err = ss.db.Where("customer_name = ?", customerName).Delete(&Database{}).Error
+	return
+}
+
 var (
 	SelfStoreInstance *SelfStore
 )

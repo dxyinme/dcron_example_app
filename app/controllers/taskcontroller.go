@@ -15,7 +15,7 @@ type TaskController struct{}
 //	@Param				body body types.TaskReq true "create or update cron task request"
 //	@Success			200 {string} OK
 //	@Failure			400 {string} BadRequest
-//	@Router				/task/{taskName} [post]
+//	@Router				/tasks/{taskName} [put]
 func (tc *TaskController) CreateOrUpdate(ctx *gin.Context) {}
 
 // Remove godoc
@@ -28,5 +28,28 @@ func (tc *TaskController) CreateOrUpdate(ctx *gin.Context) {}
 //	@Param				taskName path string true "cron task name"
 //	@Success			200	{string} OK
 //	@Failure			400 {string} BadRequest
-//	@Router				/task/{taskName} [delete]
+//	@Router				/tasks/{taskName} [delete]
 func (tc *TaskController) Remove(ctx *gin.Context) {}
+
+//	List godoc
+//
+//	@Summary			list tasks
+//	@Description	list cron tasks
+//	@Tags					task
+//	@Accept				json
+//	@Produce			json
+//	@Success			200 {object} []types.Task
+//	@Router				/tasks [get]
+func (tc *TaskController) List(ctx *gin.Context) {}
+
+//	Task Get godoc
+//
+//	@Summary			task Get
+//	@Description  task Get
+//	@Tags					task
+//	@Accept				json
+//	@Produce			json
+//	@Param				taskName path string true "task name"
+//	@Success			200 {object} types.Task
+//	@Router				/tasks/{taskName} [get]
+func (tc *TaskController) Get(ctx *gin.Context) {}
