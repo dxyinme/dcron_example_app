@@ -2,40 +2,39 @@ package db
 
 import (
 	"app/config"
+	"app/internal/common"
 	"fmt"
 	"strings"
-
-	"gorm.io/gorm"
 )
 
 type Task struct {
-	gorm.Model
-	Name    string
-	CronStr string
-	SQLStr  string
+	Name           string `gorm:"primaryKey;type:VARCHAR(128)"`
+	CronStr        string `gorm:"type:VARCHAR(64)"`
+	SQLStr         string
+	DBCustomerName string `gorm:"type:VARCHAR(128)"`
 }
 
 type Database struct {
 	CustomerName string `gorm:"primaryKey;type:VARCHAR(128)"`
-	DBType       string
-	User         string
-	Password     string
-	DatabaseName string
-	Addr         string
+	DBType       string `gorm:"type:VARCHAR(64)"`
+	User         string `gorm:"type:VARCHAR(64)"`
+	Password     string `gorm:"type:VARCHAR(64)"`
+	DatabaseName string `gorm:"type:VARCHAR(64)"`
+	Addr         string `gorm:"type:VARCHAR(128)"`
 }
 
 func (db Database) DSN() string {
-	if db.DBTypeEnum() == DBTypeMYSQL {
-		return fmt.Sprintf(MySQLDSNFormat, db.User, db.Password, db.Addr, db.DatabaseName)
+	if db.DBTypeEnum() == common.DBTypeMYSQL {
+		return fmt.Sprintf(common.MySQLDSNFormat, db.User, db.Password, db.Addr, db.DatabaseName)
 	} else {
 		panic("not implementation")
 	}
 }
 
-func (db Database) DBTypeEnum() DBType {
-	ret, ok := DBTypeMap[strings.ToLower(db.DBType)]
+func (db Database) DBTypeEnum() common.DBType {
+	ret, ok := common.DBTypeMap[strings.ToLower(db.DBType)]
 	if !ok {
-		return DBTypeInvalid
+		return common.DBTypeInvalid
 	}
 	return ret
 }

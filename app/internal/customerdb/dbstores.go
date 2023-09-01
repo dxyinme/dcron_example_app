@@ -1,9 +1,12 @@
-package db
+package customerdb
 
 import (
+	"app/internal/common"
+	"app/internal/db"
 	"errors"
 	"sync"
 
+	"github.com/sirupsen/logrus"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -12,14 +15,14 @@ type DBStores struct {
 	customerName2DB *sync.Map
 }
 
-func (dbs *DBStores) Add(db *Database) (err error) {
+func (dbs *DBStores) Add(db *db.Database) (err error) {
 	var dbconn *gorm.DB = nil
 	switch db.DBTypeEnum() {
-	case DBTypeMYSQL:
+	case common.DBTypeMYSQL:
 		{
 			dbconn, err = gorm.Open(mysql.Open(db.DSN()))
 		}
-	case DBTypePOSTGRESQL:
+	case common.DBTypePOSTGRESQL:
 		{
 			panic("not implementation")
 		}
@@ -36,11 +39,26 @@ func (dbs *DBStores) Add(db *Database) (err error) {
 }
 
 func (dbs *DBStores) Load(CustomerName string) (*gorm.DB, bool) {
-	dbInterface, ok := dbs.customerName2DB.Load(CustomerName)
-	if ok {
-		return dbInterface.(*gorm.DB), ok
+	for count := 0; count < 2; count++ {
+		dbInterface, ok := dbs.customerName2DB.Load(CustomerName)
+		if ok {
+			return dbInterface.(*gorm.DB), ok
+		} else {
+			// try to load from db
+			logrus.Infof("Load DB count %d", count)
+			ss := db.SelfStoreUtil{}.I()
+			db, err := ss.GetDataBaseByCustomerName(CustomerName)
+			if err != nil {
+				logrus.Error(err)
+				return nil, false
+			}
+			if err = dbs.Add(&db); err != nil {
+				logrus.Error(err)
+				return nil, false
+			}
+		}
 	}
-	return nil, ok
+	return nil, false
 }
 
 func (dbs *DBStores) Remove(CustomerName string) (isExist bool) {

@@ -173,7 +173,7 @@ paths:
       tags:
       - db
   /execute/runSQL:
-    get:
+    post:
       consumes:
       - application/json
       description: execute sql cmd

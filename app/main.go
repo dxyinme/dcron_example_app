@@ -3,6 +3,8 @@ package main
 import (
 	"app/config"
 	_ "app/docs"
+	"app/internal/crontasks"
+	"app/internal/customerdb"
 	"app/internal/db"
 	"app/routes"
 	"flag"
@@ -35,7 +37,8 @@ func main() {
 	}
 
 	db.SelfStoreUtil{}.Initial()
-	db.DBStoresUtil{}.Initial()
+	customerdb.DBStoresUtil{}.Initial()
+	crontasks.CronTasksContainerUtil{}.Initial()
 
 	eng := routes.New()
 	eng.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

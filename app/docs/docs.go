@@ -145,7 +145,7 @@ const docTemplate = `{
             }
         },
         "/execute/runSQL": {
-            "get": {
+            "post": {
                 "description": "execute sql cmd",
                 "consumes": [
                     "application/json"

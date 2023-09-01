@@ -9,3 +9,6 @@ mysql:
 
 rpc:
   port: 8081
+
+dcron:
+  serverName: dcronapp

@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"app/controllers/helper"
+	"app/internal/customerdb"
 	"app/internal/db"
 	"app/types"
 	"net/http"
@@ -66,7 +67,7 @@ func (c *DBController) CreateOrUpdate(ctx *gin.Context) {
 		return
 	}
 
-	err = db.DBStoresUtil{}.I().Add(dbData)
+	err = customerdb.DBStoresUtil{}.I().Add(dbData)
 	if err != nil {
 		logrus.Error(err)
 		ctx.String(http.StatusInternalServerError, err.Error())
