@@ -2,8 +2,8 @@ package controllers
 
 import (
 	"app/controllers/helper"
-	"app/internal/customerdb"
 	"app/internal/db"
+	"app/internal/logic"
 	"app/types"
 	"net/http"
 
@@ -12,6 +12,7 @@ import (
 )
 
 type DBController struct {
+	dbl logic.DBLogic
 }
 
 //	DB CreateOrUpdate godoc
@@ -51,7 +52,6 @@ func (c *DBController) CreateOrUpdate(ctx *gin.Context) {
 		return
 	}
 
-	ss := db.SelfStoreUtil{}.I()
 	dbData := &db.Database{
 		CustomerName: dbName,
 		User:         dbReq.User,
@@ -60,22 +60,17 @@ func (c *DBController) CreateOrUpdate(ctx *gin.Context) {
 		DatabaseName: dbReq.DatabaseName,
 		Addr:         dbReq.Addr,
 	}
-	err = ss.UpsertDataBase(dbData)
-	if err != nil {
-		logrus.Error(err)
+	if err = c.dbl.UpsertDatabase(dbData); err != nil {
 		ctx.String(http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	err = customerdb.DBStoresUtil{}.I().Add(dbData)
-	if err != nil {
-		logrus.Error(err)
+	if err = c.dbl.UpsertDataBaseToCache(dbData); err != nil {
 		ctx.String(http.StatusInternalServerError, err.Error())
-		if err = ss.DeleteDataBaseByCustomerName(dbName); err != nil {
-			logrus.Error(err)
-		}
+		_ = c.dbl.Remove(dbName)
 		return
 	}
+
 	ctx.String(http.StatusOK, "OK")
 }
 
@@ -105,9 +100,7 @@ func (c *DBController) Remove(ctx *gin.Context) {
 		ctx.String(http.StatusBadRequest, "dbName not exist in uri")
 		return
 	}
-	ss := db.SelfStoreUtil{}.I()
-	if err = ss.DeleteDataBaseByCustomerName(dbName); err != nil {
-		logrus.Error(err.Error())
+	if err = c.dbl.Remove(dbName); err != nil {
 		ctx.String(http.StatusInternalServerError, err.Error())
 		return
 	}
@@ -146,13 +139,10 @@ func (c *DBController) Get(ctx *gin.Context) {
 		return
 	}
 
-	ss := db.SelfStoreUtil{}.I()
-	if dbData, err = ss.GetDataBaseByCustomerName(dbName); err != nil {
-		logrus.Error(err)
+	if dbData, err = c.dbl.Get(dbName); err != nil {
 		ctx.String(http.StatusInternalServerError, err.Error())
 		return
 	}
-
 	respDB.FromDBDatabase(&dbData)
 	ctx.JSON(http.StatusOK, &respDB)
 }
@@ -166,4 +156,6 @@ func (c *DBController) Get(ctx *gin.Context) {
 //	@Produce			json
 //	@Success			200 {object} []types.DB
 //	@Router				/databases [get]
-func (c *DBController) List(ctx *gin.Context) {}
+func (c *DBController) List(ctx *gin.Context) {
+	panic("Not implemented")
+}

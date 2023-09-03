@@ -10,3 +10,10 @@ func (webDB *DB) FromDBDatabase(database *db.Database) {
 	webDB.Password = database.Password
 	webDB.User = database.User
 }
+
+func (webTask *Task) FromDBTask(task *db.Task) {
+	webTask.CronStr = task.CronStr
+	webTask.Name = task.Name
+	webTask.DBName = task.DBCustomerName
+	webTask.SQLStr = task.SQLStr
+}

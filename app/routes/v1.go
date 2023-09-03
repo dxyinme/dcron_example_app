@@ -32,7 +32,7 @@ func New() (eng *gin.Engine) {
 			execute.POST("/runSQL", executeController.RunSQL)
 		}
 
-		databases := v1.Group("/databases", dbController.List)
+		databases := v1.Group("/databases")
 		{
 			databases.PUT("/:dbName", dbController.CreateOrUpdate)
 			databases.DELETE("/:dbName", dbController.Remove)

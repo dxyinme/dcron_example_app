@@ -45,6 +45,19 @@ func (ss *SelfStore) DeleteDataBaseByCustomerName(customerName string) (err erro
 	return
 }
 
+func (ss *SelfStore) UpsertTask(task *Task) (err error) {
+	return ss.db.Save(task).Error
+}
+
+func (ss *SelfStore) DeleteTaskByTaskName(taskName string) (err error) {
+	return ss.db.Where("name = ?", taskName).Delete(&Task{}).Error
+}
+
+func (ss *SelfStore) GetTaskByTaskName(taskName string) (task Task, err error) {
+	err = ss.db.Where("name = ?", taskName).First(&task).Error
+	return
+}
+
 var (
 	SelfStoreInstance *SelfStore
 )

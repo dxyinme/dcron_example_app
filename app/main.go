@@ -31,6 +31,7 @@ var (
 func main() {
 	flag.Parse()
 	logrus.SetReportCaller(true)
+	logrus.SetLevel(logrus.DebugLevel)
 	err := config.LoadConfig(*configFile)
 	if err != nil {
 		panic(err)
