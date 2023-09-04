@@ -29,21 +29,10 @@ type TaskController struct {
 //	@Router				/tasks/{taskName} [put]
 func (tc *TaskController) CreateOrUpdate(ctx *gin.Context) {
 	var (
-		taskName  string
-		uriHelper *helper.UriHelper = nil
-		exist     bool              = false
-		err       error
-		taskReq   = types.TaskReq{}
+		taskName string = helper.RemoveSlash(ctx.Param("taskName"))
+		err      error
+		taskReq  = types.TaskReq{}
 	)
-	if uriHelper, err = helper.GetUriHelperFromGinCtx(ctx); err != nil {
-		logrus.Error(err)
-		return
-	}
-	if taskName, exist = uriHelper.Get("taskName"); !exist {
-		logrus.Error("taskName not exist in uri")
-		ctx.String(http.StatusBadRequest, "taskName not exist in uri")
-		return
-	}
 
 	if err = ctx.ShouldBindJSON(&taskReq); err != nil {
 		logrus.Error(err)
@@ -83,20 +72,9 @@ func (tc *TaskController) CreateOrUpdate(ctx *gin.Context) {
 //	@Router				/tasks/{taskName} [delete]
 func (tc *TaskController) Remove(ctx *gin.Context) {
 	var (
-		taskName  string
-		uriHelper *helper.UriHelper = nil
-		exist     bool              = false
-		err       error
+		taskName string = helper.RemoveSlash(ctx.Param("taskName"))
+		err      error
 	)
-	if uriHelper, err = helper.GetUriHelperFromGinCtx(ctx); err != nil {
-		logrus.Error(err)
-		return
-	}
-	if taskName, exist = uriHelper.Get("taskName"); !exist {
-		logrus.Error("taskName not exist in uri")
-		ctx.String(http.StatusBadRequest, "taskName not exist in uri")
-		return
-	}
 
 	tc.taskl.RemoveCronTaskFromDcron(taskName)
 	if err = tc.taskl.DeleteCronTask(taskName); err != nil {
@@ -129,22 +107,12 @@ func (tc *TaskController) List(ctx *gin.Context) {}
 //	@Router				/tasks/{taskName} [get]
 func (tc *TaskController) Get(ctx *gin.Context) {
 	var (
-		taskName  string
-		uriHelper *helper.UriHelper = nil
-		exist     bool              = false
-		response  types.Task
-		err       error
-		taskData  db.Task
+		taskName string = helper.RemoveSlash(ctx.Param("taskName"))
+		response types.Task
+		err      error
+		taskData db.Task
 	)
-	if uriHelper, err = helper.GetUriHelperFromGinCtx(ctx); err != nil {
-		logrus.Error(err)
-		return
-	}
-	if taskName, exist = uriHelper.Get("taskName"); !exist {
-		logrus.Error("taskName not exist in uri")
-		ctx.String(http.StatusBadRequest, "taskName not exist in uri")
-		return
-	}
+
 	if taskData, err = tc.taskl.GetCronTask(taskName); err != nil {
 		ctx.String(http.StatusInternalServerError, err.Error())
 		return

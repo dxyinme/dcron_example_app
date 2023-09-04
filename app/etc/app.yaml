@@ -9,8 +9,5 @@ mysql:
   password: 123456
   user: root
 
-rpc:
-  port: 8081
-
 dcron:
   serverName: dcronapp

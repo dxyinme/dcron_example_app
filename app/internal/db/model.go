@@ -8,7 +8,8 @@ import (
 )
 
 type Task struct {
-	Name           string `gorm:"primaryKey;type:VARCHAR(128)"`
+	ID             uint   `gorm:"primarykey"`
+	Name           string `gorm:"index;type:VARCHAR(128)"`
 	CronStr        string `gorm:"type:VARCHAR(64)"`
 	SQLStr         string
 	DBCustomerName string `gorm:"type:VARCHAR(128)"`

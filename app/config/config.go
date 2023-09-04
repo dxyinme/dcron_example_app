@@ -10,7 +10,6 @@ type ConfigType struct {
 	Port  uint      `yaml:"port"`
 	Redis RedisType `yaml:"redis"`
 	MySQL MySQLType `yaml:"mysql"`
-	Rpc   RpcType   `yaml:"rpc"`
 	Dcron DcronType `yaml:"dcron"`
 }
 
@@ -24,10 +23,6 @@ type MySQLType struct {
 	User     string `yaml:"user"`
 	Addr     string `yaml:"addr"`
 	Password string `yaml:"password"`
-}
-
-type RpcType struct {
-	Port uint `yaml:"port"`
 }
 
 type DcronType struct {

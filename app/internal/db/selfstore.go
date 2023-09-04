@@ -45,8 +45,13 @@ func (ss *SelfStore) DeleteDataBaseByCustomerName(customerName string) (err erro
 	return
 }
 
-func (ss *SelfStore) UpsertTask(task *Task) (err error) {
-	return ss.db.Save(task).Error
+func (ss *SelfStore) UpsertTask(task *Task) error {
+	if tID, err := ss.GetTaskID(task.Name); err != nil {
+		return ss.db.Create(task).Error
+	} else {
+		task.ID = tID
+		return ss.db.Save(task).Error
+	}
 }
 
 func (ss *SelfStore) DeleteTaskByTaskName(taskName string) (err error) {
@@ -56,6 +61,12 @@ func (ss *SelfStore) DeleteTaskByTaskName(taskName string) (err error) {
 func (ss *SelfStore) GetTaskByTaskName(taskName string) (task Task, err error) {
 	err = ss.db.Where("name = ?", taskName).First(&task).Error
 	return
+}
+
+func (ss *SelfStore) GetTaskID(taskName string) (ID uint, err error) {
+	t := Task{}
+	err = ss.db.Where("name = ?", taskName).Select("id").First(&t).Error
+	return t.ID, err
 }
 
 var (

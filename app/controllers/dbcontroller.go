@@ -28,25 +28,11 @@ type DBController struct {
 //	@Router				/databases/{dbName} [put]
 func (c *DBController) CreateOrUpdate(ctx *gin.Context) {
 	var (
-		err       error = nil
-		dbName    string
-		exist     bool
-		dbReq                       = types.DBReq{}
-		uriHelper *helper.UriHelper = nil
+		err    error  = nil
+		dbName string = helper.RemoveSlash(ctx.Param("dbName"))
+		dbReq         = types.DBReq{}
 	)
-
-	if uriHelper, err = helper.GetUriHelperFromGinCtx(ctx); err != nil {
-		logrus.Error(err)
-		return
-	}
-
-	dbName, exist = uriHelper.Get("dbName")
-	if !exist {
-		logrus.Error("dbName not exist in uri")
-		ctx.String(http.StatusBadRequest, "dbName not exist in uri")
-		return
-	}
-
+	logrus.Debugf("dbName=%s", dbName)
 	if err = ctx.ShouldBindJSON(&dbReq); err != nil {
 		logrus.Error(err)
 		return
@@ -86,20 +72,10 @@ func (c *DBController) CreateOrUpdate(ctx *gin.Context) {
 //	@Router				/databases/{dbName} [delete]
 func (c *DBController) Remove(ctx *gin.Context) {
 	var (
-		err       error
-		dbName    string
-		exist     bool              = false
-		uriHelper *helper.UriHelper = nil
+		err    error
+		dbName string = helper.RemoveSlash(ctx.Param("dbName"))
 	)
-	if uriHelper, err = helper.GetUriHelperFromGinCtx(ctx); err != nil {
-		logrus.Error(err)
-		return
-	}
-	if dbName, exist = uriHelper.Get("dbName"); !exist {
-		logrus.Error("dbName not exist in uri")
-		ctx.String(http.StatusBadRequest, "dbName not exist in uri")
-		return
-	}
+	logrus.Debugf("dbName=%s", dbName)
 	if err = c.dbl.Remove(dbName); err != nil {
 		ctx.String(http.StatusInternalServerError, err.Error())
 		return
@@ -119,26 +95,12 @@ func (c *DBController) Remove(ctx *gin.Context) {
 //	@Router				/databases/{dbName} [get]
 func (c *DBController) Get(ctx *gin.Context) {
 	var (
-		err       error
-		dbName    string
-		dbData    = db.Database{}
-		respDB    = types.DB{}
-		exist     bool
-		uriHelper *helper.UriHelper = nil
+		err    error
+		dbName string = helper.RemoveSlash(ctx.Param("dbName"))
+		dbData        = db.Database{}
+		respDB        = types.DB{}
 	)
-
-	if uriHelper, err = helper.GetUriHelperFromGinCtx(ctx); err != nil {
-		logrus.Error(err)
-		return
-	}
-
-	dbName, exist = uriHelper.Get("dbName")
-	if !exist {
-		logrus.Error("dbName not exist in uri")
-		ctx.String(http.StatusBadRequest, "dbName not exist in uri")
-		return
-	}
-
+	logrus.Debugf("dbName=%s", dbName)
 	if dbData, err = c.dbl.Get(dbName); err != nil {
 		ctx.String(http.StatusInternalServerError, err.Error())
 		return
