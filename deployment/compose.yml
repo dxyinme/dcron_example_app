@@ -1,21 +1,8 @@
 # Just an example, can not be used in production environment.
 version: '3.0'
 services:
-  redis:
-    image: redis:6.0-alpine
-    restart: always
-
-  mysql:
-    image: mysql:8.0
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: 123456
-
   app:
-    image: dcronapp:latest
+    image: dcron_app:v1
     scale: 3
-    links:
-      - mysql
-      - redis
     ports:
-      - 10010-10020:8080
+      - 10010-10012:8080
