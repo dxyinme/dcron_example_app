@@ -2,11 +2,13 @@ package crontasks
 
 import (
 	"app/config"
+	"app/internal/db"
 	"time"
 
 	redis "github.com/go-redis/redis/v8"
 	"github.com/libi/dcron"
 	"github.com/libi/dcron/driver"
+	"github.com/sirupsen/logrus"
 )
 
 var (
@@ -46,6 +48,33 @@ func (du CronTasksContainerUtil) Initial() {
 		dcron.WithHashReplicas(10),
 		dcron.WithNodeUpdateDuration(time.Second*10),
 		dcron.WithRecoverFunc(func(d *dcron.Dcron) {
+			ss := db.SelfStoreUtil{}.I()
+			limit := 10
+			lastId := uint(0)
+			for {
+				tasks, err := ss.GetTasksByIDLimit(lastId, limit)
+				if err != nil {
+					logrus.Error(err)
+					continue
+				}
+				for _, task := range tasks {
+					cronTask := &CronTask{}
+					cronTask.FromDBTask(&task)
+					if err = cronTask.Initial(); err != nil {
+						logrus.Error(err)
+						continue
+					}
+					if err = d.AddJob(cronTask.Name, cronTask.CronStr, cronTask); err != nil {
+						logrus.Error(err)
+						continue
+					}
+				}
+				ltasks := len(tasks)
+				if ltasks < limit {
+					break
+				}
+				lastId = tasks[ltasks-1].ID + 1
+			}
 		}),
 	)
 

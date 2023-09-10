@@ -69,6 +69,11 @@ func (ss *SelfStore) GetTaskID(taskName string) (ID uint, err error) {
 	return t.ID, err
 }
 
+func (ss *SelfStore) GetTasksByIDLimit(ID uint, limit int) (tasks []Task, err error) {
+	err = ss.db.Where("id >= ?", ID).Order("id").Limit(limit).Find(&tasks).Error
+	return
+}
+
 var (
 	SelfStoreInstance *SelfStore
 )

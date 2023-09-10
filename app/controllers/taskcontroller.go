@@ -93,7 +93,30 @@ func (tc *TaskController) Remove(ctx *gin.Context) {
 //	@Produce			json
 //	@Success			200 {object} []types.Task
 //	@Router				/tasks [get]
-func (tc *TaskController) List(ctx *gin.Context) {}
+func (tc *TaskController) List(ctx *gin.Context) {
+	tasksResponse := make([]types.Task, 0)
+	ss := db.SelfStoreUtil{}.I()
+	limit := 10
+	lastId := uint(0)
+	for {
+		tasks, err := ss.GetTasksByIDLimit(lastId, limit)
+		if err != nil {
+			logrus.Error(err)
+			continue
+		}
+		for _, task := range tasks {
+			webTask := types.Task{}
+			webTask.FromDBTask(&task)
+			tasksResponse = append(tasksResponse, webTask)
+		}
+		ltasks := len(tasks)
+		if ltasks < limit {
+			break
+		}
+		lastId = tasks[ltasks-1].ID + 1
+	}
+	ctx.JSON(http.StatusOK, tasksResponse)
+}
 
 //	Task Get godoc
 //
