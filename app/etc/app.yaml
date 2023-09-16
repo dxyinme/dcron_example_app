@@ -11,3 +11,9 @@ mysql:
 
 dcron:
   serverName: dcronapp
+
+innerCall:
+  channel: dcronapp-channel
+  redis:
+    addr: redis:6379
+    db: 2

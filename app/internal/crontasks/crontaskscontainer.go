@@ -77,14 +77,12 @@ func (du CronTasksContainerUtil) Initial() {
 			}
 		}),
 	)
-
-	dcronInstance.Start()
-
 	cronTasksContainerInstance = &CronTasksContainer{
 		dcronDriverInstance: dcronDriverInstance,
 		dcronInstance:       dcronInstance,
 		redisCli:            redisCli,
 	}
+	dcronInstance.Start()
 }
 
 func (du CronTasksContainerUtil) I() *CronTasksContainer {

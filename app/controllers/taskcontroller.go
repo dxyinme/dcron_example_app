@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"app/controllers/helper"
+	"app/internal/common/innercall"
 	"app/internal/db"
 	"app/internal/logic"
 	"app/types"
@@ -51,6 +52,14 @@ func (tc *TaskController) CreateOrUpdate(ctx *gin.Context) {
 		return
 	}
 
+	ic := innercall.InnerCallUtil{}.I()
+	op, err := innercall.NewUpsertOperation(&taskData)
+	if err != nil {
+		logrus.Error(err)
+		return
+	}
+	ic.Send(op)
+
 	if err = tc.taskl.UpsertCronTaskToDcron(&taskData); err != nil {
 		ctx.String(http.StatusInternalServerError, err.Error())
 		return
@@ -81,6 +90,10 @@ func (tc *TaskController) Remove(ctx *gin.Context) {
 		ctx.String(http.StatusInternalServerError, err.Error())
 		return
 	}
+
+	ic := innercall.InnerCallUtil{}.I()
+	ic.Send(innercall.NewDeleteOperation(taskName))
+
 	ctx.String(http.StatusOK, "OK")
 }
 

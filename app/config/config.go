@@ -7,10 +7,11 @@ import (
 )
 
 type ConfigType struct {
-	Port  uint      `yaml:"port"`
-	Redis RedisType `yaml:"redis"`
-	MySQL MySQLType `yaml:"mysql"`
-	Dcron DcronType `yaml:"dcron"`
+	Port      uint          `yaml:"port"`
+	Redis     RedisType     `yaml:"redis"`
+	MySQL     MySQLType     `yaml:"mysql"`
+	Dcron     DcronType     `yaml:"dcron"`
+	InnerCall InnerCallType `yaml:"innerCall"`
 }
 
 type RedisType struct {
@@ -27,6 +28,11 @@ type MySQLType struct {
 
 type DcronType struct {
 	ServiceName string `yaml:"serviceName"`
+}
+
+type InnerCallType struct {
+	Channel string    `yaml:"channel"`
+	Redis   RedisType `yaml:"redis"`
 }
 
 var (

@@ -70,7 +70,6 @@ func newDBStores() (dbs *DBStores, err error) {
 	dbs = &DBStores{
 		customerName2DB: new(sync.Map),
 	}
-
 	return
 }
 

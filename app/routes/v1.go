@@ -15,6 +15,7 @@ func New() (eng *gin.Engine) {
 	taskController := new(controllers.TaskController)
 	executeController := new(controllers.ExecuteController)
 	dbController := new(controllers.DBController)
+	clusterController := new(controllers.ClusterController)
 
 	v1 := eng.Group(basePath)
 	{
@@ -39,6 +40,11 @@ func New() (eng *gin.Engine) {
 			databases.GET("/:dbName", dbController.Get)
 		}
 		v1.GET("/databases", dbController.List)
+
+		cluster := v1.Group("/cluster")
+		{
+			cluster.GET("/nodes", clusterController.ListNodes)
+		}
 	}
 	return
 }

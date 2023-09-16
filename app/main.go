@@ -2,7 +2,9 @@ package main
 
 import (
 	"app/config"
+	"app/controllers/helper"
 	_ "app/docs"
+	"app/internal/common/innercall"
 	"app/internal/crontasks"
 	"app/internal/customerdb"
 	"app/internal/db"
@@ -40,6 +42,8 @@ func main() {
 	db.SelfStoreUtil{}.Initial()
 	customerdb.DBStoresUtil{}.Initial()
 	crontasks.CronTasksContainerUtil{}.Initial()
+	innercall.InnerCallUtil{}.Initial()
+	go helper.InnerCallLoop()
 
 	eng := routes.New()
 	eng.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
