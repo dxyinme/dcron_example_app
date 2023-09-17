@@ -1,0 +1,19 @@
+port: 8080
+redis:
+  addr: redis:6379
+  db: 1
+  # password: 123456
+
+mysql:
+  addr: mysql:3306
+  password: 123456
+  user: root
+
+dcron:
+  serverName: dcronapp
+
+innerCall:
+  channel: dcronapp-channel
+  redis:
+    addr: redis:6379
+    db: 2

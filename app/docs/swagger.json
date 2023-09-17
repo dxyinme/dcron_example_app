@@ -6,10 +6,66 @@
         "contact": {},
         "version": "0.1"
     },
-    "basePath": "/api/v1/user",
+    "basePath": "/api/v1",
     "paths": {
         "/databases": {
             "get": {
+                "description": "list database",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "db"
+                ],
+                "summary": "list Database",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/types.DB"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/databases/{dbName}": {
+            "get": {
+                "description": "db Get",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "db"
+                ],
+                "summary": "db Get",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "database customer name",
+                        "name": "dbName",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/types.DB"
+                        }
+                    }
+                }
+            },
+            "put": {
                 "description": "db CreateOrUpdate",
                 "consumes": [
                     "application/json"
@@ -24,7 +80,7 @@
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "database custom name",
+                        "description": "database customer name",
                         "name": "dbName",
                         "in": "path",
                         "required": true
@@ -47,10 +103,40 @@
                         }
                     }
                 }
+            },
+            "delete": {
+                "description": "db Remove",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "db"
+                ],
+                "summary": "db Remove",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "database customer name",
+                        "name": "dbName",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
             }
         },
-        "/execute": {
-            "get": {
+        "/execute/runSQL": {
+            "post": {
                 "description": "execute sql cmd",
                 "consumes": [
                     "application/json"
@@ -83,8 +169,64 @@
                 }
             }
         },
-        "/task/{taskName}": {
-            "post": {
+        "/tasks": {
+            "get": {
+                "description": "list cron tasks",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "task"
+                ],
+                "summary": "list tasks",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/types.Task"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tasks/{taskName}": {
+            "get": {
+                "description": "task Get",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "task"
+                ],
+                "summary": "task Get",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "task name",
+                        "name": "taskName",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/types.Task"
+                        }
+                    }
+                }
+            },
+            "put": {
                 "description": "create or update cron task",
                 "consumes": [
                     "application/json"
@@ -165,35 +307,40 @@
                     }
                 }
             }
-        },
-        "/tasks": {
-            "get": {
-                "description": "list cron tasks",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "tasks"
-                ],
-                "summary": "list tasks",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/types.Task"
-                            }
-                        }
-                    }
-                }
-            }
         }
     },
     "definitions": {
+        "types.DB": {
+            "type": "object",
+            "required": [
+                "addr",
+                "customerName",
+                "databaseName",
+                "dbType",
+                "password",
+                "user"
+            ],
+            "properties": {
+                "addr": {
+                    "type": "string"
+                },
+                "customerName": {
+                    "type": "string"
+                },
+                "databaseName": {
+                    "type": "string"
+                },
+                "dbType": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "user": {
+                    "type": "string"
+                }
+            }
+        },
         "types.DBReq": {
             "type": "object",
             "required": [
@@ -224,10 +371,14 @@
         "types.RunSQLReq": {
             "type": "object",
             "required": [
-                "SQLStr"
+                "SQLStr",
+                "dbCustomerName"
             ],
             "properties": {
                 "SQLStr": {
+                    "type": "string"
+                },
+                "dbCustomerName": {
                     "type": "string"
                 }
             }

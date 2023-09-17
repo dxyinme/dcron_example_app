@@ -1,5 +1,27 @@
-basePath: /api/v1/user
+basePath: /api/v1
 definitions:
+  types.DB:
+    properties:
+      addr:
+        type: string
+      customerName:
+        type: string
+      databaseName:
+        type: string
+      dbType:
+        type: string
+      password:
+        type: string
+      user:
+        type: string
+    required:
+    - addr
+    - customerName
+    - databaseName
+    - dbType
+    - password
+    - user
+    type: object
   types.DBReq:
     properties:
       addr:
@@ -23,8 +45,11 @@ definitions:
     properties:
       SQLStr:
         type: string
+      dbCustomerName:
+        type: string
     required:
     - SQLStr
+    - dbCustomerName
     type: object
   types.Task:
     properties:
@@ -67,9 +92,66 @@ paths:
     get:
       consumes:
       - application/json
+      description: list database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/types.DB'
+            type: array
+      summary: list Database
+      tags:
+      - db
+  /databases/{dbName}:
+    delete:
+      consumes:
+      - application/json
+      description: db Remove
+      parameters:
+      - description: database customer name
+        in: path
+        name: dbName
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: db Remove
+      tags:
+      - db
+    get:
+      consumes:
+      - application/json
+      description: db Get
+      parameters:
+      - description: database customer name
+        in: path
+        name: dbName
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.DB'
+      summary: db Get
+      tags:
+      - db
+    put:
+      consumes:
+      - application/json
       description: db CreateOrUpdate
       parameters:
-      - description: database custom name
+      - description: database customer name
         in: path
         name: dbName
         required: true
@@ -90,8 +172,8 @@ paths:
       summary: db CreateOrUpdate
       tags:
       - db
-  /execute:
-    get:
+  /execute/runSQL:
+    post:
       consumes:
       - application/json
       description: execute sql cmd
@@ -112,7 +194,24 @@ paths:
       summary: execute sql cmd
       tags:
       - execute
-  /task/{taskName}:
+  /tasks:
+    get:
+      consumes:
+      - application/json
+      description: list cron tasks
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/types.Task'
+            type: array
+      summary: list tasks
+      tags:
+      - task
+  /tasks/{taskName}:
     delete:
       consumes:
       - application/json
@@ -137,7 +236,27 @@ paths:
       summary: remove task
       tags:
       - task
-    post:
+    get:
+      consumes:
+      - application/json
+      description: task Get
+      parameters:
+      - description: task name
+        in: path
+        name: taskName
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.Task'
+      summary: task Get
+      tags:
+      - task
+    put:
       consumes:
       - application/json
       description: create or update cron task
@@ -167,21 +286,4 @@ paths:
       summary: create or update task
       tags:
       - task
-  /tasks:
-    get:
-      consumes:
-      - application/json
-      description: list cron tasks
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/types.Task'
-            type: array
-      summary: list tasks
-      tags:
-      - tasks
 swagger: "2.0"
