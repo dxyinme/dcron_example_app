@@ -34,6 +34,6 @@ docker build -f deployment/Dockerfile -t dcronapp:latest .
 Done|MySQL
 TODO|PostgreSQL
 TODO|Monitor
-TODO|Use ETCD to 
+TODO|Use ETCD to run dcron
 TODO|Use service discovery to implement inner call.
 
