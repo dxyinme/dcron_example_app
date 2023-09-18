@@ -1,5 +1,13 @@
 # dcron_example_app
 
+## Design Doc
+
+[design-doc](documentation/design-doc.md)
+
+## CI 
+
+[![Docker Image CI](https://github.com/dxyinme/dcron_example_app/actions/workflows/docker-image.yml/badge.svg?branch=main)](https://github.com/dxyinme/dcron_example_app/actions/workflows/docker-image.yml)
+
 ## Build
 
 ```bash
@@ -18,3 +26,14 @@ go build
 # docker build
 docker build -f deployment/Dockerfile -t dcronapp:latest .
 ```
+
+## Features
+
+ status | Features
+---|---
+Done|MySQL
+TODO|PostgreSQL
+TODO|Monitor
+TODO|Use ETCD to run dcron
+TODO|Use service discovery to implement inner call.
+
