@@ -1,1 +1,1 @@
-deployment/Dockerfile.dev
+deployment/compose-dev.yml

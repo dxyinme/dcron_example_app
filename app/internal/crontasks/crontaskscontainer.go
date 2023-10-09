@@ -57,6 +57,9 @@ func (du CronTasksContainerUtil) Initial() {
 					logrus.Error(err)
 					continue
 				}
+				if len(tasks) == 0 {
+					break
+				}
 				for _, task := range tasks {
 					cronTask := &CronTask{}
 					cronTask.FromDBTask(&task)
