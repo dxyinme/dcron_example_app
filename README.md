@@ -24,7 +24,22 @@ go build
 
 ```bash
 # docker build
-docker build -f deployment/Dockerfile -t dcronapp:latest .
+docker build -f deployment/Dockerfile -t dcron_app:v1 .
+```
+
+## Run in docker compose
+
+You can change the app.yaml volume to change the configuration.
+```yaml
+version: '3.0'
+services:
+  app:
+    image: dcron_app:v1
+    scale: 3
+    volumes:
+      - /path/to/yourself-app.yaml:/app/etc/app.yaml
+    ports:
+      - 10010-10012:8080
 ```
 
 ## Features
@@ -33,7 +48,7 @@ docker build -f deployment/Dockerfile -t dcronapp:latest .
 ---|---
 Done|MySQL
 TODO|PostgreSQL
-TODO|Monitor
+Done|Monitor
 TODO|Use ETCD to run dcron
 TODO|Use service discovery to implement inner call.
 
