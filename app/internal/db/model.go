@@ -5,6 +5,8 @@ import (
 	"app/internal/common"
 	"fmt"
 	"strings"
+
+	"gorm.io/gorm"
 )
 
 type Task struct {
@@ -22,6 +24,13 @@ type Database struct {
 	Password     string `gorm:"type:VARCHAR(64)"`
 	DatabaseName string `gorm:"type:VARCHAR(64)"`
 	Addr         string `gorm:"type:VARCHAR(128)"`
+}
+
+type TaskMetric struct {
+	gorm.Model
+
+	TaskName string
+	NodeID   string
 }
 
 func (db Database) DSN() string {

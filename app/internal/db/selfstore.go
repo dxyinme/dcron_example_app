@@ -3,6 +3,7 @@ package db
 import (
 	"app/config"
 
+	"github.com/sirupsen/logrus"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -28,7 +29,18 @@ func newSelfStore() (ss *SelfStore, err error) {
 	if err != nil {
 		return nil, err
 	}
+
+	if config.I().EnableReporter {
+		err = ss.db.AutoMigrate(&TaskMetric{})
+		if err != nil {
+			logrus.Error(err)
+		}
+	}
 	return
+}
+
+func (ss *SelfStore) ReportTaskMetric(tm *TaskMetric) {
+	_ = ss.db.Save(tm)
 }
 
 func (ss *SelfStore) UpsertDataBase(db *Database) (err error) {
@@ -70,6 +82,7 @@ func (ss *SelfStore) GetTaskID(taskName string) (ID uint, err error) {
 }
 
 func (ss *SelfStore) GetTasksByIDLimit(ID uint, limit int) (tasks []Task, err error) {
+	tasks = make([]Task, 0)
 	err = ss.db.Where("id >= ?", ID).Order("id").Limit(limit).Find(&tasks).Error
 	return
 }

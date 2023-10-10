@@ -22,6 +22,11 @@ func (cronTask *CronTask) Run() {
 		"name=%s|dbname=%s|sql-str=`%s`",
 		cronTask.Name, cronTask.DBCustomerName, cronTask.SQLStr)
 
+	dbi := db.SelfStoreUtil{}.I()
+	go dbi.ReportTaskMetric(&db.TaskMetric{
+		TaskName: cronTask.Name,
+		NodeID:   CronTasksContainerUtil{}.I().dcronInstance.NodeID(),
+	})
 	if err := cronTask.dbconn.Exec(cronTask.SQLStr).Error; err != nil {
 		logrus.Error(err)
 	}

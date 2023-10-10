@@ -7,11 +7,12 @@ import (
 )
 
 type ConfigType struct {
-	Port      uint          `yaml:"port"`
-	Redis     RedisType     `yaml:"redis"`
-	MySQL     MySQLType     `yaml:"mysql"`
-	Dcron     DcronType     `yaml:"dcron"`
-	InnerCall InnerCallType `yaml:"innerCall"`
+	Port           uint          `yaml:"port"`
+	Redis          RedisType     `yaml:"redis"`
+	MySQL          MySQLType     `yaml:"mysql"`
+	Dcron          DcronType     `yaml:"dcron"`
+	InnerCall      InnerCallType `yaml:"innerCall"`
+	EnableReporter bool          `yaml:"enableReporter"`
 }
 
 type RedisType struct {
@@ -30,6 +31,9 @@ type DcronType struct {
 	ServiceName string `yaml:"serviceName"`
 }
 
+// channel name and channel redis configuration,
+// TODO:
+// remove redis dependency in inner call.
 type InnerCallType struct {
 	Channel string    `yaml:"channel"`
 	Redis   RedisType `yaml:"redis"`

@@ -17,3 +17,5 @@ innerCall:
   redis:
     addr: redis:6379
     db: 2
+
+enableReporter: false
