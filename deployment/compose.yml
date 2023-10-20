@@ -2,7 +2,7 @@
 version: '3.0'
 services:
   app:
-    image: dcron_app:v1
+    image: dcron_example_app:latest
     scale: 3
     ports:
       - 10010-10012:8080

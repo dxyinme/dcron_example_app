@@ -24,7 +24,7 @@ go build
 
 ```bash
 # docker build
-docker build -f deployment/Dockerfile -t dcron_app:v1 .
+docker build -f deployment/Dockerfile -t dcron_example_app:latest .
 ```
 
 ## Run in docker compose
@@ -34,7 +34,7 @@ You can change the app.yaml volume to change the configuration.
 version: '3.0'
 services:
   app:
-    image: dcron_app:v1
+    image: dcron_example_app:latest
     scale: 3
     volumes:
       - /path/to/yourself-app.yaml:/app/etc/app.yaml
