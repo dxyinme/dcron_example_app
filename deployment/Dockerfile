@@ -6,7 +6,6 @@ ENV GOOS linux
 ENV GOPROXY https://goproxy.cn,direct
 WORKDIR /build
 COPY . .
-RUN cd app && go mod tidy
 RUN go build -o /app/app app/main.go
 
 FROM alpine:3.17
