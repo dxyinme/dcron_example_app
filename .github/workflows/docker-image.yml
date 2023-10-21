@@ -24,9 +24,14 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
     
-    - name: Build And Push the Docker image
+    - name: Build Docker Image
       env:
         registry: ${{ secrets.DOCKERHUB_USERNAME }}
       run: |
         docker build . --file deployment/Dockerfile --tag $registry/dcron_example_app:latest
+
+    - name: Push Docker Image
+      env:
+        registry: ${{ secrets.DOCKERHUB_USERNAME }}
+      run: |
         docker push $registry/dcron_example_app:latest
