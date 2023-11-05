@@ -41,3 +41,14 @@ type DB struct {
 	CustomerName string `json:"customerName" binding:"required"`
 	DBBase
 }
+
+// TaskMetricsReq example
+type TaskMetricsReq struct {
+	BeginTime int `json:"beginTime" binding:"optional"`
+	EndTime   int `json:"endTime" binding:"optional"`
+}
+
+// TaskMetricsResp example
+type TaskMetricsResp struct {
+	TaskBase
+}
