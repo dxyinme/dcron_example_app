@@ -156,3 +156,18 @@ func (tc *TaskController) Get(ctx *gin.Context) {
 	response.FromDBTask(&taskData)
 	ctx.JSON(http.StatusOK, &response)
 }
+
+// Task Metrics godoc
+//
+//	@Summary 					Get task running metric
+//	@Description			Get task running metric
+//	@Tags 						task
+//	@Accept 					json
+//	@Produce 					json
+//	@Param						taskName path string true "task name"
+//	@Param						body body types.TaskMetricsReq true "task metrics request"
+//	@Success 					200 {object} types.TaskMetricsResp
+//	@Router 					/tasks/{taskName}/metrics [get]
+func (tc *TaskController) GetMetric(ctx *gin.Context) {
+
+}
