@@ -5,9 +5,9 @@ import (
 	"app/internal/db"
 	"time"
 
-	redis "github.com/go-redis/redis/v8"
 	"github.com/libi/dcron"
 	"github.com/libi/dcron/driver"
+	redis "github.com/redis/go-redis/v9"
 	"github.com/sirupsen/logrus"
 )
 
