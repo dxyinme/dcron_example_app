@@ -15,17 +15,17 @@ type DBController struct {
 	dbl logic.DBLogic
 }
 
-//	DB CreateOrUpdate godoc
+// DB CreateOrUpdate godoc
 //
-//	@Summary			db CreateOrUpdate
-//	@Description  db CreateOrUpdate
-//	@Tags					db
-//	@Accept				json
-//	@Produce			json
-//	@Param				dbName path string true "database customer name"
-//	@Param				body body types.DBReq true "database CreateOrUpdate request"
-//	@Success			200 {string} OK
-//	@Router				/databases/{dbName} [put]
+// @Summary				db CreateOrUpdate
+// @Description		db CreateOrUpdate
+// @Tags					db
+// @Accept				json
+// @Produce				json
+// @Param					dbName path string true "database customer name"
+// @Param					body body types.DBReq true "database CreateOrUpdate request"
+// @Success				200 {string} OK
+// @Router				/databases/{dbName} [put]
 func (c *DBController) CreateOrUpdate(ctx *gin.Context) {
 	var (
 		err    error  = nil
@@ -60,16 +60,16 @@ func (c *DBController) CreateOrUpdate(ctx *gin.Context) {
 	ctx.String(http.StatusOK, "OK")
 }
 
-//	DB Remove godoc
+// DB Remove godoc
 //
-//	@Summary			db Remove
-//	@Description  db Remove
-//	@Tags					db
-//	@Accept				json
-//	@Produce			json
-//	@Param				dbName path string true "database customer name"
-//	@Success			200 {string} OK
-//	@Router				/databases/{dbName} [delete]
+// @Summary			 	db Remove
+// @Description 	db Remove
+// @Tags					db
+// @Accept				json
+// @Produce				json
+// @Param					dbName path string true "database customer name"
+// @Success				200 {string} OK
+// @Router				/databases/{dbName} [delete]
 func (c *DBController) Remove(ctx *gin.Context) {
 	var (
 		err    error
@@ -83,16 +83,16 @@ func (c *DBController) Remove(ctx *gin.Context) {
 	ctx.String(http.StatusOK, "OK")
 }
 
-//	DB Get godoc
+// DB Get godoc
 //
-//	@Summary			db Get
-//	@Description  db Get
-//	@Tags					db
-//	@Accept				json
-//	@Produce			json
-//	@Param				dbName path string true "database customer name"
-//	@Success			200 {object} types.DB
-//	@Router				/databases/{dbName} [get]
+// @Summary				db Get
+// @Description  	db Get
+// @Tags					db
+// @Accept				json
+// @Produce				json
+// @Param					dbName path string true "database customer name"
+// @Success				200 {object} types.DB
+// @Router				/databases/{dbName} [get]
 func (c *DBController) Get(ctx *gin.Context) {
 	var (
 		err    error
@@ -109,15 +109,15 @@ func (c *DBController) Get(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, &respDB)
 }
 
-//	DB List godoc
+// DB List godoc
 //
-//	@Summary			list Database
-//	@Description	list database
-//	@Tags					db
-//	@Accept				json
-//	@Produce			json
-//	@Success			200 {object} []types.DB
-//	@Router				/databases [get]
+// @Summary				list Database
+// @Description		list database
+// @Tags					db
+// @Accept				json
+// @Produce				json
+// @Success				200 {object} []types.DB
+// @Router				/databases [get]
 func (c *DBController) List(ctx *gin.Context) {
 	panic("Not implemented")
 }

@@ -52,3 +52,8 @@ type TaskMetricsReq struct {
 type TaskMetricsResp struct {
 	TaskBase
 }
+
+// Node example
+type Node struct {
+	Name string `json:"name" binding:"required"`
+}

@@ -16,18 +16,18 @@ type TaskController struct {
 	taskl logic.TaskLogic
 }
 
-//	CreateOrUpdate godoc
+// CreateOrUpdate godoc
 //
-//	@Summary			create or update task
-//	@Description	create or update cron task
-//	@Tags					task
-//	@Accept				json
-//	@Produce			json
-//	@Param				taskName path string true "cron task name"
-//	@Param				body body types.TaskReq true "create or update cron task request"
-//	@Success			200 {string} OK
-//	@Failure			400 {string} BadRequest
-//	@Router				/tasks/{taskName} [put]
+// @Summary				create or update task
+// @Description		create or update cron task
+// @Tags					task
+// @Accept				json
+// @Produce				json
+// @Param					taskName path string true "cron task name"
+// @Param					body body types.TaskReq true "create or update cron task request"
+// @Success				200 {string} OK
+// @Failure				400 {string} BadRequest
+// @Router				/tasks/{taskName} [put]
 func (tc *TaskController) CreateOrUpdate(ctx *gin.Context) {
 	var (
 		taskName string = helper.RemoveSlash(ctx.Param("taskName"))
@@ -97,15 +97,15 @@ func (tc *TaskController) Remove(ctx *gin.Context) {
 	ctx.String(http.StatusOK, "OK")
 }
 
-//	List godoc
+// List godoc
 //
-//	@Summary			list tasks
-//	@Description	list cron tasks
-//	@Tags					task
-//	@Accept				json
-//	@Produce			json
-//	@Success			200 {object} []types.Task
-//	@Router				/tasks [get]
+// @Summary				list tasks
+// @Description		list cron tasks
+// @Tags					task
+// @Accept				json
+// @Produce				json
+// @Success				200 {object} []types.Task
+// @Router				/tasks [get]
 func (tc *TaskController) List(ctx *gin.Context) {
 	tasksResponse := make([]types.Task, 0)
 	ss := db.SelfStoreUtil{}.I()
@@ -131,16 +131,16 @@ func (tc *TaskController) List(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, tasksResponse)
 }
 
-//	Task Get godoc
+// Task Get godoc
 //
-//	@Summary			task Get
-//	@Description  task Get
-//	@Tags					task
-//	@Accept				json
-//	@Produce			json
-//	@Param				taskName path string true "task name"
-//	@Success			200 {object} types.Task
-//	@Router				/tasks/{taskName} [get]
+// @Summary				task Get
+// @Description		task Get
+// @Tags					task
+// @Accept				json
+// @Produce				json
+// @Param					taskName path string true "task name"
+// @Success				200 {object} types.Task
+// @Router				/tasks/{taskName} [get]
 func (tc *TaskController) Get(ctx *gin.Context) {
 	var (
 		taskName string = helper.RemoveSlash(ctx.Param("taskName"))

@@ -1,7 +1,9 @@
 package config
 
 import (
-	"io/ioutil"
+	"fmt"
+	"os"
+	"strings"
 
 	"gopkg.in/yaml.v3"
 )
@@ -47,15 +49,26 @@ func I() ConfigType {
 	return configInstance
 }
 
-func LoadConfig(filename string) (err error) {
-	return loadConfigFromFile(filename, &configInstance)
+func LoadConfig(mode, filename string) (err error) {
+	switch strings.ToLower(mode) {
+	case "fromfile":
+		return loadConfigFromFile(filename, &configInstance)
+	case "fromenv":
+		return loadConfigFromEnv(&configInstance)
+	default:
+		return fmt.Errorf("mode error: %s", mode)
+	}
 }
 
 func loadConfigFromFile(filename string, config *ConfigType) (err error) {
-	content, err := ioutil.ReadFile(filename)
+	content, err := os.ReadFile(filename)
 	if err != nil {
 		return err
 	}
 	err = yaml.Unmarshal(content, config)
+	return
+}
+
+func loadConfigFromEnv(config *ConfigType) (err error) {
 	return
 }

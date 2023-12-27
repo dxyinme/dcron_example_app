@@ -30,7 +30,7 @@ func InnerCallLoop() {
 				taskData := db.Task{}
 				if err := json.Unmarshal(op.Content, &taskData); err != nil {
 					logrus.Error(err)
-					break
+					continue
 				}
 				if err := taskLogic.UpsertCronTaskToDcron(&taskData); err != nil {
 					logrus.Error(err)

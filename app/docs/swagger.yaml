@@ -41,6 +41,13 @@ definitions:
     - password
     - user
     type: object
+  types.Node:
+    properties:
+      name:
+        type: string
+    required:
+    - name
+    type: object
   types.RunSQLReq:
     properties:
       SQLStr:
@@ -60,6 +67,26 @@ definitions:
       dbName:
         type: string
       name:
+        type: string
+    required:
+    - SQLStr
+    - cronStr
+    - dbName
+    type: object
+  types.TaskMetricsReq:
+    properties:
+      beginTime:
+        type: integer
+      endTime:
+        type: integer
+    type: object
+  types.TaskMetricsResp:
+    properties:
+      SQLStr:
+        type: string
+      cronStr:
+        type: string
+      dbName:
         type: string
     required:
     - SQLStr
@@ -88,6 +115,38 @@ info:
   title: APP
   version: "0.1"
 paths:
+  /cluster/nodes:
+    get:
+      consumes:
+      - application/json
+      description: list nodes
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/types.Node'
+            type: array
+      summary: list nodes
+      tags:
+      - cluster
+  /cluster/nodes/{nodeName}:
+    get:
+      consumes:
+      - application/json
+      description: get node
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.Node'
+      summary: get node
+      tags:
+      - cluster
   /databases:
     get:
       consumes:
@@ -284,6 +343,33 @@ paths:
           schema:
             type: string
       summary: create or update task
+      tags:
+      - task
+  /tasks/{taskName}/metrics:
+    get:
+      consumes:
+      - application/json
+      description: Get task running metric
+      parameters:
+      - description: task name
+        in: path
+        name: taskName
+        required: true
+        type: string
+      - description: task metrics request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/types.TaskMetricsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.TaskMetricsResp'
+      summary: Get task running metric
       tags:
       - task
 swagger: "2.0"

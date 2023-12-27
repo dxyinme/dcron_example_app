@@ -19,23 +19,23 @@ import (
 
 var (
 	configFile = flag.String("f", "etc/app.yaml", "config file")
+	configMode = flag.String("mode", "FromFile", "config mode [ FromFile | FromEnv ]")
 )
 
-//	@title			APP
-//	@version		0.1
-//	@description
-//	@termsOfService	http://swagger.io/terms/
+// @title												APP
+// @version											0.1
+// @description
+// @termsOfService							http://swagger.io/terms/
 //
-//	@BasePath /api/v1
+// @BasePath										/api/v1
 //
-//	@externalDocs.description		OpenAPI
-//	@externalDocs.url						https://swagger.io/resources/open-api/
+// @externalDocs.description		OpenAPI
+// @externalDocs.url						https://swagger.io/resources/open-api/
 func main() {
 	flag.Parse()
 	logrus.SetReportCaller(true)
 	logrus.SetLevel(logrus.DebugLevel)
-	err := config.LoadConfig(*configFile)
-	if err != nil {
+	if err := config.LoadConfig(*configMode, *configFile); err != nil {
 		panic(err)
 	}
 

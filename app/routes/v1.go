@@ -43,6 +43,10 @@ func New() (eng *gin.Engine) {
 
 		cluster := v1.Group("/cluster")
 		{
+			nodes := cluster.Group("/nodes")
+			{
+				nodes.GET("/:nodeName", clusterController.GetNode)
+			}
 			cluster.GET("/nodes", clusterController.ListNodes)
 		}
 	}

@@ -13,16 +13,16 @@ import (
 
 type ExecuteController struct{}
 
-//	RunSQL godoc
+// RunSQL godoc
 //
-//	@Summary			execute sql cmd
-//	@Description	execute sql cmd
-//	@Tags					execute
-//	@Accept				json
-//	@Produce			json
-//	@Param				body body types.RunSQLReq true "Run SQL request"
-//	@Success			200 {string} OK
-//	@Router				/execute/runSQL [post]
+// @Summary				execute sql cmd
+// @Description		execute sql cmd
+// @Tags					execute
+// @Accept				json
+// @Produce				json
+// @Param					body body types.RunSQLReq true "Run SQL request"
+// @Success				200 {string} OK
+// @Router				/execute/runSQL [post]
 func (ec *ExecuteController) RunSQL(ctx *gin.Context) {
 	var (
 		err    error

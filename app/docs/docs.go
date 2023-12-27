@@ -17,6 +17,55 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/cluster/nodes": {
+            "get": {
+                "description": "list nodes",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cluster"
+                ],
+                "summary": "list nodes",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/types.Node"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/cluster/nodes/{nodeName}": {
+            "get": {
+                "description": "get node",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cluster"
+                ],
+                "summary": "get node",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/types.Node"
+                        }
+                    }
+                }
+            }
+        },
         "/databases": {
             "get": {
                 "description": "list database",
@@ -316,6 +365,47 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/tasks/{taskName}/metrics": {
+            "get": {
+                "description": "Get task running metric",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "task"
+                ],
+                "summary": "Get task running metric",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "task name",
+                        "name": "taskName",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "task metrics request",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/types.TaskMetricsReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/types.TaskMetricsResp"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -377,6 +467,17 @@ const docTemplate = `{
                 }
             }
         },
+        "types.Node": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "types.RunSQLReq": {
             "type": "object",
             "required": [
@@ -410,6 +511,36 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.TaskMetricsReq": {
+            "type": "object",
+            "properties": {
+                "beginTime": {
+                    "type": "integer"
+                },
+                "endTime": {
+                    "type": "integer"
+                }
+            }
+        },
+        "types.TaskMetricsResp": {
+            "type": "object",
+            "required": [
+                "SQLStr",
+                "cronStr",
+                "dbName"
+            ],
+            "properties": {
+                "SQLStr": {
+                    "type": "string"
+                },
+                "cronStr": {
+                    "type": "string"
+                },
+                "dbName": {
                     "type": "string"
                 }
             }
