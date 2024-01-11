@@ -17,9 +17,9 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/cluster/nodes": {
+        "/cluster/node": {
             "get": {
-                "description": "list nodes",
+                "description": "get current node infomation",
                 "consumes": [
                     "application/json"
                 ],
@@ -29,33 +29,7 @@ const docTemplate = `{
                 "tags": [
                     "cluster"
                 ],
-                "summary": "list nodes",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/types.Node"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/cluster/nodes/{nodeName}": {
-            "get": {
-                "description": "get node",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "cluster"
-                ],
-                "summary": "get node",
+                "summary": "get current node infomation",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -470,11 +444,18 @@ const docTemplate = `{
         "types.Node": {
             "type": "object",
             "required": [
-                "name"
+                "id",
+                "tasks"
             ],
             "properties": {
-                "name": {
+                "id": {
                     "type": "string"
+                },
+                "tasks": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/types.Task"
+                    }
                 }
             }
         },

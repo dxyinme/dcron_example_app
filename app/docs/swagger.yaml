@@ -43,10 +43,15 @@ definitions:
     type: object
   types.Node:
     properties:
-      name:
+      id:
         type: string
+      tasks:
+        items:
+          $ref: '#/definitions/types.Task'
+        type: array
     required:
-    - name
+    - id
+    - tasks
     type: object
   types.RunSQLReq:
     properties:
@@ -115,28 +120,11 @@ info:
   title: APP
   version: "0.1"
 paths:
-  /cluster/nodes:
+  /cluster/node:
     get:
       consumes:
       - application/json
-      description: list nodes
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/types.Node'
-            type: array
-      summary: list nodes
-      tags:
-      - cluster
-  /cluster/nodes/{nodeName}:
-    get:
-      consumes:
-      - application/json
-      description: get node
+      description: get current node infomation
       produces:
       - application/json
       responses:
@@ -144,7 +132,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/types.Node'
-      summary: get node
+      summary: get current node infomation
       tags:
       - cluster
   /databases:

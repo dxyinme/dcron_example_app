@@ -29,6 +29,10 @@ func (ctc *CronTasksContainer) RemoveTask(jobName string) {
 	ctc.dcronInstance.Remove(jobName)
 }
 
+func (ctc *CronTasksContainer) NodeID() string {
+	return ctc.dcronInstance.NodeID()
+}
+
 type CronTasksContainerUtil struct{}
 
 func (du CronTasksContainerUtil) Initial() {

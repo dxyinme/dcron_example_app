@@ -10,7 +10,7 @@ import (
 	"app/internal/db"
 	"app/routes"
 	"flag"
-	"log"
+	"fmt"
 
 	"github.com/sirupsen/logrus"
 	swaggerFiles "github.com/swaggo/files"
@@ -38,6 +38,7 @@ func main() {
 	if err := config.LoadConfig(*configMode, *configFile); err != nil {
 		panic(err)
 	}
+	logrus.Debugf("config:%v", config.I())
 
 	db.SelfStoreUtil{}.Initial()
 	customerdb.DBStoresUtil{}.Initial()
@@ -47,7 +48,9 @@ func main() {
 
 	eng := routes.New()
 	eng.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	if err := eng.Run(); err != nil {
-		log.Fatal(err)
+	if err := eng.Run(
+		fmt.Sprintf(":%d", config.I().Port),
+	); err != nil {
+		logrus.Fatal(err)
 	}
 }

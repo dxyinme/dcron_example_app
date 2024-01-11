@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"app/internal/crontasks"
 	"app/types"
 	"net/http"
 
@@ -9,29 +10,18 @@ import (
 
 type ClusterController struct{}
 
-// cluster list nodes godoc
-//
-// @Summary				list nodes
-// @Description 	list nodes
-// @Tags					cluster
-// @Accept				json
-// @Produce				json
-// @Success				200 {object} []types.Node
-// @Router				/cluster/nodes [get]
-func (c *ClusterController) ListNodes(ctx *gin.Context) {
-	ListNodesResp := make([]types.Node, 0)
-
-	ctx.JSON(http.StatusOK, ListNodesResp)
-}
-
 // cluster get node by node name godoc
 //
-// @Summary				get node
-// @Description 	get node
+// @Summary				get current node infomation
+// @Description 	get current node infomation
 // @Tags					cluster
 // @Accept				json
 // @Produce				json
 // @Success				200 {object} types.Node
-// @Router				/cluster/nodes/{nodeName} [get]
+// @Router				/cluster/node [get]
 func (c *ClusterController) GetNode(ctx *gin.Context) {
+	ctx.JSON(http.StatusOK,
+		types.Node{
+			ID: crontasks.CronTasksContainerUtil{}.I().NodeID(),
+		})
 }

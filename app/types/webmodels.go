@@ -55,5 +55,6 @@ type TaskMetricsResp struct {
 
 // Node example
 type Node struct {
-	Name string `json:"name" binding:"required"`
+	ID    string `json:"id" binding:"required"`
+	Tasks []Task `json:"tasks" binding:"required"`
 }
